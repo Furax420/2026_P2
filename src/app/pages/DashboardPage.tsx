@@ -46,21 +46,21 @@ export function DashboardPage() {
   ]
 
   return (
-    <main className="min-h-screen bg-gray-900 text-white p-8">
-      <div className="max-w-6xl mx-auto">
+    <main className="min-h-screen bg-gray-900 px-4 py-6 text-white sm:px-6 sm:py-8 lg:px-8 lg:py-10">
+      <div className="mx-auto w-full max-w-6xl">
         <HeaderComponent
           title="Historique des Jeux Olympiques - TéléSport"
           indicators={indicators}
         />
 
-        <p className="text-lg mb-8">
+        <p className="mb-6 max-w-4xl text-base leading-relaxed text-gray-200 sm:mb-8 sm:text-lg">
           Bienvenue sur la page dédiée à l&apos;historique des Jeux Olympiques.
           Explorez les performances des pays au fil des années.
         </p>
 
         <MedalChart olympics={data} />
 
-        <p className="text-sm text-gray-400 mt-2">
+        <p className="mt-3 text-xs leading-relaxed text-gray-400 sm:text-sm">
           Cliquez sur un pays pour voir ses détails
         </p>
       </div>

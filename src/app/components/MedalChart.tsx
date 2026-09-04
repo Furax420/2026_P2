@@ -81,23 +81,23 @@ export function MedalChart({ olympics }: MedalChartProps) {
 
   return (
     <section
-      className="rounded-lg bg-gray-800 p-6 shadow-xl sm:p-8"
+      className="rounded-lg bg-gray-800 p-4 shadow-xl sm:p-6 lg:p-8"
       aria-label="Répartition du nombre total de médailles par pays"
     >
-      <div className="h-[400px]">
+      <div className="h-[280px] w-full sm:h-[360px] lg:h-[440px]">
         <Pie data={chartData} options={chartOptions} />
       </div>
 
       <ul
-        className="mt-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-5"
+        className="mt-5 grid grid-cols-1 gap-2 sm:mt-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5"
         aria-label="Légende des pays"
       >
         {olympics.map((olympic, index) => (
-          <li key={olympic.id}>
+          <li key={olympic.id} className="min-w-0">
             <button
               type="button"
               onClick={() => navigate(`/country/${olympic.id}`)}
-              className="flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm text-gray-100 transition hover:bg-gray-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
+              className="flex min-h-11 w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-gray-100 transition hover:bg-gray-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
               aria-label={`Voir le détail de ${olympic.country}`}
             >
               <span
@@ -105,7 +105,7 @@ export function MedalChart({ olympics }: MedalChartProps) {
                 style={{ backgroundColor: BACKGROUND_COLORS[index] }}
                 aria-hidden="true"
               />
-              <CountryName country={olympic.country} />
+              <CountryName country={olympic.country} className="min-w-0" />
             </button>
           </li>
         ))}

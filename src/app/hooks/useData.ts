@@ -66,18 +66,21 @@ interface UseDataResult {
   isLoading: boolean
 }
 
-export function useData(): UseDataResult {
+export function useData(reloadKey: string | number = 'default'): UseDataResult {
   const [data, setData] = useState<Olympic[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [loadedKey, setLoadedKey] = useState<string | number | null>(null)
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
       setData(MOCK_OLYMPICS_DATA)
-      setIsLoading(false)
+      setLoadedKey(reloadKey)
     }, SIMULATED_LOADING_DELAY_MS)
 
     return () => window.clearTimeout(timeoutId)
-  }, [])
+  }, [reloadKey])
 
-  return { data, isLoading }
+  return {
+    data,
+    isLoading: loadedKey !== reloadKey,
+  }
 }

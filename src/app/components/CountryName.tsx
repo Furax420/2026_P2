@@ -91,9 +91,9 @@ export function CountryFlag({ country }: CountryFlagProps) {
 
 export function CountryName({ country, className = '' }: CountryNameProps) {
   return (
-    <span className={`inline-flex items-center gap-2 ${className}`.trim()}>
+    <span className={`inline-flex max-w-full items-center gap-2 ${className}`.trim()}>
       <CountryFlag country={country} />
-      <span>{country}</span>
+      <span className="min-w-0 break-words">{country}</span>
     </span>
   )
 }
