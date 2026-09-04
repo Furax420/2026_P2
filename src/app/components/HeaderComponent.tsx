@@ -1,8 +1,9 @@
+import type { ReactNode } from 'react'
 import type { IndicatorData } from '../models/indicator'
 import { Indicator } from './Indicator'
 
 interface HeaderComponentProps {
-  title: string
+  title: ReactNode
   indicators: IndicatorData[]
 }
 

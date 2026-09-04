@@ -7,7 +7,9 @@ import {
   type ChartOptions,
 } from 'chart.js'
 import { Pie } from 'react-chartjs-2'
+import { useNavigate } from 'react-router-dom'
 import type { Olympic } from '../models/olympic'
+import { CountryName } from './CountryName'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
@@ -31,19 +33,6 @@ const BORDER_COLORS = [
   'rgba(153, 102, 255, 1)',
 ]
 
-const chartOptions: ChartOptions<'pie'> = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      position: 'bottom',
-      labels: {
-        color: 'white',
-      },
-    },
-  },
-}
-
 function getTotalMedals(olympic: Olympic) {
   return olympic.participations.reduce(
     (total, participation) => total + participation.medalsCount,
@@ -52,6 +41,8 @@ function getTotalMedals(olympic: Olympic) {
 }
 
 export function MedalChart({ olympics }: MedalChartProps) {
+  const navigate = useNavigate()
+
   const chartData: ChartData<'pie'> = {
     labels: olympics.map((olympic) => olympic.country),
     datasets: [
@@ -65,14 +56,60 @@ export function MedalChart({ olympics }: MedalChartProps) {
     ],
   }
 
+  const chartOptions: ChartOptions<'pie'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+    onClick: (_event, activeElements) => {
+      const clickedElement = activeElements[0]
+
+      if (!clickedElement) {
+        return
+      }
+
+      const country = olympics[clickedElement.index]
+
+      if (country) {
+        navigate(`/country/${country.id}`)
+      }
+    },
+  }
+
   return (
     <section
-      className="bg-gray-800 p-8 rounded-lg shadow-xl"
+      className="rounded-lg bg-gray-800 p-6 shadow-xl sm:p-8"
       aria-label="Répartition du nombre total de médailles par pays"
     >
       <div className="h-[400px]">
         <Pie data={chartData} options={chartOptions} />
       </div>
+
+      <ul
+        className="mt-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-5"
+        aria-label="Légende des pays"
+      >
+        {olympics.map((olympic, index) => (
+          <li key={olympic.id}>
+            <button
+              type="button"
+              onClick={() => navigate(`/country/${olympic.id}`)}
+              className="flex w-full items-center gap-2 rounded-md px-2 py-2 text-left text-sm text-gray-100 transition hover:bg-gray-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
+              aria-label={`Voir le détail de ${olympic.country}`}
+            >
+              <span
+                className="h-3 w-3 shrink-0 rounded-full border border-white/20"
+                style={{ backgroundColor: BACKGROUND_COLORS[index] }}
+                aria-hidden="true"
+              />
+              <CountryName country={olympic.country} />
+            </button>
+          </li>
+        ))}
+      </ul>
     </section>
   )
 }

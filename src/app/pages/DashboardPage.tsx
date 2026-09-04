@@ -1,5 +1,6 @@
 import { HeaderComponent } from '../components/HeaderComponent'
 import { MedalChart } from '../components/MedalChart'
+import { PageState } from '../components/PageState'
 import { useData } from '../hooks/useData'
 import type { IndicatorData } from '../models/indicator'
 import type { Olympic } from '../models/olympic'
@@ -17,9 +18,19 @@ export function DashboardPage() {
 
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-gray-900 text-white p-8">
-        <div className="max-w-6xl mx-auto">Chargement...</div>
-      </main>
+      <PageState
+        title="Chargement..."
+        message="Récupération des données olympiques en cours."
+      />
+    )
+  }
+
+  if (data.length === 0) {
+    return (
+      <PageState
+        title="Aucune donnée"
+        message="Aucune donnée olympique n'est disponible pour le moment."
+      />
     )
   }
 
