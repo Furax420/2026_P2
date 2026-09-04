@@ -1,14 +1,8 @@
-import { useEffect, useState } from 'react'
 import { HeaderComponent } from '../components/HeaderComponent'
 import { MedalChart } from '../components/MedalChart'
+import { useData } from '../hooks/useData'
 import type { IndicatorData } from '../models/indicator'
 import type { Olympic } from '../models/olympic'
-
-interface DashboardPageProps {
-  olympics: Olympic[]
-}
-
-const SIMULATED_LOADING_DELAY_MS = 500
 
 function countOlympicEditions(olympics: Olympic[]) {
   return new Set(
@@ -18,18 +12,10 @@ function countOlympicEditions(olympics: Olympic[]) {
   ).size
 }
 
-export function DashboardPage({ olympics }: DashboardPageProps) {
-  const [data, setData] = useState<Olympic[] | null>(null)
+export function DashboardPage() {
+  const { data, isLoading } = useData()
 
-  useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      setData(olympics)
-    }, SIMULATED_LOADING_DELAY_MS)
-
-    return () => window.clearTimeout(timeoutId)
-  }, [olympics])
-
-  if (!data) {
+  if (isLoading) {
     return (
       <main className="min-h-screen bg-gray-900 text-white p-8">
         <div className="max-w-6xl mx-auto">Chargement...</div>
