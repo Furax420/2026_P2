@@ -1,6 +1,7 @@
 import { HeaderComponent } from '../components/HeaderComponent'
 import { MedalChart } from '../components/MedalChart'
 import { PageState } from '../components/PageState'
+import { DataUnavailablePage } from './DataUnavailablePage'
 import { useData } from '../hooks/useData'
 import type { IndicatorData } from '../models/indicator'
 import type { Olympic } from '../models/olympic'
@@ -26,12 +27,7 @@ export function DashboardPage() {
   }
 
   if (data.length === 0) {
-    return (
-      <PageState
-        title="Aucune donnée"
-        message="Aucune donnée olympique n'est disponible pour le moment."
-      />
-    )
+    return <DataUnavailablePage />
   }
 
   const indicators: IndicatorData[] = [

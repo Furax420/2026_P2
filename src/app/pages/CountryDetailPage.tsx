@@ -1,5 +1,7 @@
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { CountryName } from "../components/CountryName";
+import { DataUnavailablePage } from "./DataUnavailablePage";
+import { InvalidCountryPage } from "./InvalidCountryPage";
 import { CountryRanking } from "../components/CountryRanking";
 import { HeaderComponent } from "../components/HeaderComponent";
 import { MedalEvolutionChart } from "../components/MedalEvolutionChart";
@@ -42,20 +44,7 @@ export function CountryDetailPage() {
   }
 
   if (data.length === 0) {
-    return (
-      <PageState
-        title="Aucune donnée"
-        message="Les informations du pays ne sont pas disponibles."
-        role="alert"
-      >
-        <Link
-          to="/"
-          className="inline-flex w-full items-center justify-center rounded-md bg-blue-600 px-4 py-2 font-semibold text-white transition hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400 sm:w-auto"
-        >
-          Retour au Dashboard
-        </Link>
-      </PageState>
-    );
+    return <DataUnavailablePage />;
   }
 
   const countryId = parseCountryId(id);
@@ -64,7 +53,11 @@ export function CountryDetailPage() {
     : undefined;
 
   if (!country) {
-    return <Navigate to="/404" replace />;
+    return <InvalidCountryPage requestedId={id} />;
+  }
+
+  if (country.participations.length === 0) {
+    return <DataUnavailablePage countryName={country.country} />;
   }
 
   const indicators: IndicatorData[] = [

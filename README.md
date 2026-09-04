@@ -1,122 +1,146 @@
-# TéléSport - Olympic Games History Dashboard
+# TéléSport - Olympic Games Dashboard
 
-Interactive web application to visualize historical performance data of countries in the Olympic Games.
+Application React permettant de visualiser les performances de plusieurs pays aux Jeux Olympiques à partir de données simulées.
 
-## 🚀 Features
+Le projet a été refactorisé afin de séparer clairement les pages, les composants d'interface, la gestion des données et les modèles TypeScript.
 
-- **Interactive Dashboard**: View medal counts by country with interactive charts
-- **Country Details**: Explore detailed statistics for each participating country
-- **Data Visualization**: Interactive charts powered by Chart.js
-- **Responsive Design**: Optimized for desktop and mobile devices
-- **Modern Stack**: Built with React 19, TypeScript, and Tailwind CSS
+## Fonctionnalités
 
-## 📋 Prerequisites
+- Dashboard avec vue globale des médailles par pays
+- Graphiques interactifs avec Chart.js
+- Navigation vers une page de détail pour chaque pays
+- Affichage des participations, du nombre total de médailles et du nombre total d'athlètes
+- Graphique d'évolution des médailles par édition
+- Classement général des pays avec mise en avant du pays consulté
+- Navigation directe entre les pays depuis le classement
+- Page 404 pour les routes ou identifiants invalides
+- Affichage responsive desktop, tablette et mobile
+- Interactions adaptées au tactile sur les graphiques
+- Données simulées centralisées dans un hook `useData`
+- Typage TypeScript sans `any`
 
-- **Node.js** 22 LTS or higher
-- **npm** (included with Node.js)
+## Prérequis
 
-## 🛠️ Installation
+- Node.js 22 LTS ou supérieur
+- npm
 
-Clone the repository:
+## Installation
+
+Cloner le dépôt :
 
 ```bash
-git clone https://github.com/openclassrooms/p2-dfsjs.git
-cd p2-dfsjs
+git clone https://github.com/Furax420/2026_P2
+cd 2026_P2
 ```
 
-Install dependencies:
+Installer les dépendances :
 
 ```bash
 npm install
 ```
 
-## 🎯 Usage
+## Lancer le projet
 
-### Development Server
-
-Start the development server:
+### Développement
 
 ```bash
 npm run dev
 ```
 
-The application will be available at [http://localhost:5173](http://localhost:5173)
+L'application est ensuite disponible par défaut sur :
 
-### Production Build
+```text
+http://localhost:5173
+```
 
-Build the application for production:
+### Build de production
 
 ```bash
 npm run build
 ```
 
-### Linting
-
-Run the linter to check code quality:
+### Lint
 
 ```bash
 npm run lint
 ```
 
-## 📁 Project Structure
+## Architecture du projet
 
-```
-p2-dfsjs/
-├── public/              # Static public assets
-├── src/
-│   ├── App.tsx         # Main application component
-│   ├── main.tsx        # React entry point
-│   └── index.css       # Global styles
-├── index.html          # Main HTML page
-├── package.json        # Project dependencies
-├── tsconfig.json       # TypeScript configuration
-├── vite.config.ts      # Vite configuration
-├── tailwind.config.js  # Tailwind CSS configuration
-└── .eslintrc.cjs       # ESLint configuration
+```text
+src/
+├── app/
+│   ├── components/     # Composants UI réutilisables
+│   ├── pages/          # Pages principales de l'application
+│   ├── hooks/          # Accès et gestion des données
+│   └── models/         # Interfaces et types TypeScript
+├── App.tsx             # Routing principal
+├── main.tsx            # Point d'entrée React
+└── index.css           # Styles globaux
 ```
 
-## 🔧 Tech Stack
+Le découpage repose sur une séparation simple des responsabilités :
 
-- **React 19** - UI library with latest features
-- **TypeScript** - Static type checking
-- **Vite 5** - Fast build tool and dev server
-- **Tailwind CSS 4** - Utility-first CSS framework
-- **React Router 6** - Client-side routing
-- **Chart.js** - Interactive data visualization
-- **ESLint** - Code quality and consistency
+- `components/` contient les composants réutilisables et principalement orientés affichage ;
+- `pages/` contient les pages de l'application et orchestre les données nécessaires à l'affichage ;
+- `hooks/` centralise l'accès aux données simulées via `useData` ;
+- `models/` contient les interfaces TypeScript utilisées dans l'application.
 
-## 📊 Data
+Une description plus complète est disponible dans [`ARCHITECTURE.md`](./ARCHITECTURE.md).
 
-The application currently uses mock data to simulate Olympic Games statistics. This architecture is designed to facilitate future integration with a REST API backend.
+## Navigation
 
-## 🎨 Design
+Routes principales :
 
-The application features:
+```text
+/               Dashboard
+/country/:id    Détail d'un pays
+/404            Page non trouvée
+```
 
-- Clean, modern interface optimized for data visualization
-- Responsive layout adapting to all screen sizes
-- Interactive charts with hover effects
-- Smooth navigation between pages
+Une URL inconnue ou un identifiant de pays invalide redirige vers la page 404.
 
-## 📚 Documentation
+## Données
 
-For more information on the technologies used:
+L'application utilise actuellement des données JSON simulées.
 
-- [React Documentation](https://react.dev)
-- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
-- [Vite Guide](https://vitejs.dev)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-- [React Router Documentation](https://reactrouter.com)
-- [Chart.js Documentation](https://www.chartjs.org/docs/latest/)
+La récupération des données est centralisée dans le hook :
 
-## 🤝 Contributing
+```text
+src/app/hooks/useData.ts
+```
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Ce choix permet aux pages de ne pas dépendre directement de la source des données. Le hook pourra donc être remplacé ou adapté plus tard pour utiliser une API réelle sans avoir à reprendre toute l'interface.
 
-## 📝 License
+## Responsive
 
-This project is available for educational and personal use.
+L'interface a été adaptée pour fonctionner sur :
 
----
+- desktop ;
+- tablette ;
+- téléphone.
 
-**Built with React 19 + TypeScript + Vite + Tailwind CSS**
+Sur les écrans plus petits, certaines parties de l'interface sont réorganisées pour conserver une bonne lisibilité. Le classement des pays est notamment affiché dans une section repliable sur mobile et tablette.
+
+Les points du graphique d'évolution disposent également d'une zone tactile élargie afin de faciliter leur utilisation sur téléphone.
+
+## Stack technique
+
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS
+- React Router
+- Chart.js
+- ESLint
+
+## Documentation
+
+- [`ARCHITECTURE.md`](./ARCHITECTURE.md) : organisation et choix d'architecture
+- `notes-architecture.md` : notes d'analyse et de refactorisation du starter
+
+## Contexte
+
+Projet réalisé dans le cadre d'un exercice de refactorisation et de développement front-end React.
+
+L'objectif principal était de reprendre un starter existant, améliorer sa maintenabilité, appliquer une architecture plus claire et compléter l'expérience utilisateur tout en conservant des données simulées.
