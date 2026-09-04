@@ -13,9 +13,10 @@ Le projet a été refactorisé afin de séparer clairement les pages, les compos
 - Graphique d'évolution des médailles par édition
 - Classement général des pays avec mise en avant du pays consulté
 - Navigation directe entre les pays depuis le classement
-- Page 404 pour les routes ou identifiants invalides
+- Pages dédiées aux routes inconnues, aux identifiants de pays invalides et aux données indisponibles
 - Affichage responsive desktop, tablette et mobile
 - Interactions adaptées au tactile sur les graphiques
+- État de chargement simulé avant l'affichage des données
 - Données simulées centralisées dans un hook `useData`
 - Typage TypeScript sans `any`
 
@@ -65,15 +66,29 @@ npm run build
 npm run lint
 ```
 
+### Prévisualisation du build
+
+Après avoir exécuté `npm run build` :
+
+```bash
+npm run preview
+```
+
 ## Architecture du projet
 
 ```text
 src/
 ├── app/
-│   ├── components/     # Composants UI réutilisables
-│   ├── pages/          # Pages principales de l'application
-│   ├── hooks/          # Accès et gestion des données
-│   └── models/         # Interfaces et types TypeScript
+│   ├── components/          # Composants UI réutilisables et graphiques
+│   ├── hooks/
+│   │   └── useData.ts       # Données simulées et état de chargement
+│   ├── models/              # Interfaces et types TypeScript
+│   └── pages/
+│       ├── DashboardPage.tsx
+│       ├── CountryDetailPage.tsx
+│       ├── InvalidCountryPage.tsx
+│       ├── DataUnavailablePage.tsx
+│       └── NotFoundPage.tsx
 ├── App.tsx             # Routing principal
 ├── main.tsx            # Point d'entrée React
 └── index.css           # Styles globaux
@@ -98,11 +113,11 @@ Routes principales :
 /404            Page non trouvée
 ```
 
-Une URL inconnue ou un identifiant de pays invalide redirige vers la page 404.
+Une URL inconnue est redirigée vers `/404`. Sur `/country/:id`, un identifiant invalide ou inexistant affiche une page dédiée sans laisser l'utilisateur sur un écran vide. Un pays connu dont les participations sont absentes affiche quant à lui un état « données indisponibles ».
 
 ## Données
 
-L'application utilise actuellement des données JSON simulées.
+L'application utilise actuellement des données simulées déclarées en TypeScript.
 
 La récupération des données est centralisée dans le hook :
 
@@ -111,6 +126,8 @@ src/app/hooks/useData.ts
 ```
 
 Ce choix permet aux pages de ne pas dépendre directement de la source des données. Le hook pourra donc être remplacé ou adapté plus tard pour utiliser une API réelle sans avoir à reprendre toute l'interface.
+
+Un délai de 500 ms simule une récupération asynchrone et permet de vérifier l'état de chargement. L'entrée « Allemagne » ne contient volontairement aucune participation : elle sert à tester le cas où un identifiant de pays existe, mais où les données nécessaires à la page détail sont manquantes.
 
 ## Responsive
 
@@ -123,6 +140,30 @@ L'interface a été adaptée pour fonctionner sur :
 Sur les écrans plus petits, certaines parties de l'interface sont réorganisées pour conserver une bonne lisibilité. Le classement des pays est notamment affiché dans une section repliable sur mobile et tablette.
 
 Les points du graphique d'évolution disposent également d'une zone tactile élargie afin de faciliter leur utilisation sur téléphone.
+
+## Captures d'écran
+
+Les captures suivantes documentent les deux pages principales dans les formats desktop et mobile.
+
+### Dashboard
+
+#### Desktop
+
+![Dashboard TéléSport au format desktop](./docs/screenshots/dashboard-desktop.png)
+
+#### Mobile
+
+![Dashboard TéléSport au format mobile](./docs/screenshots/dashboard-mobile.png)
+
+### Page détail d'un pays
+
+#### Desktop
+
+![Page détail TéléSport au format desktop](./docs/screenshots/country-detail-desktop.png)
+
+#### Mobile
+
+![Page détail TéléSport au format mobile](./docs/screenshots/country-detail-mobile.png)
 
 ## Stack technique
 
@@ -137,7 +178,15 @@ Les points du graphique d'évolution disposent également d'une zone tactile él
 ## Documentation
 
 - [`ARCHITECTURE.md`](./ARCHITECTURE.md) : organisation et choix d'architecture
-- `notes-architecture.md` : notes d'analyse et de refactorisation du starter
+- [`notes-architecture.md`](./notes-architecture.md) : notes d'analyse et de refactorisation du starter
+
+## Limites connues
+
+- Les données sont simulées localement : il n'y a ni API, ni authentification, ni persistance côté serveur.
+- Le modèle fournit un total de médailles par participation, sans ventilation entre or, argent et bronze.
+- Le chargement réseau est simulé avec un délai fixe de 500 ms.
+- L'entrée « Allemagne » est un cas de test volontaire pour l'état « données indisponibles » et ne contient aucune participation.
+- Aucun test automatisé n'est attendu dans le périmètre de cet exercice ; les parcours et les tailles d'écran sont vérifiés manuellement.
 
 ## Contexte
 

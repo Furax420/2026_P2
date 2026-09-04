@@ -10,6 +10,7 @@ import { Pie } from 'react-chartjs-2'
 import { useNavigate } from 'react-router-dom'
 import type { Olympic } from '../models/olympic'
 import { CountryName } from './CountryName'
+import { MissingDataWarning } from './MissingDataWarning'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
@@ -98,13 +99,19 @@ export function MedalChart({ olympics }: MedalChartProps) {
               type="button"
               onClick={() => navigate(`/country/${olympic.id}`)}
               className="flex min-h-11 w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-gray-100 transition hover:bg-gray-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
-              aria-label={`Voir le détail de ${olympic.country}`}
+              aria-label={`Voir le détail de ${olympic.country}${
+                olympic.participations.length === 0 ? ', informations manquantes' : ''
+              }`}
             >
-              <span
-                className="h-3 w-3 shrink-0 rounded-full border border-white/20"
-                style={{ backgroundColor: BACKGROUND_COLORS[index] }}
-                aria-hidden="true"
-              />
+              {olympic.participations.length === 0 ? (
+                <MissingDataWarning />
+              ) : (
+                <span
+                  className="h-3 w-3 shrink-0 rounded-full border border-white/20"
+                  style={{ backgroundColor: BACKGROUND_COLORS[index] }}
+                  aria-hidden="true"
+                />
+              )}
               <CountryName country={olympic.country} className="min-w-0" />
             </button>
           </li>

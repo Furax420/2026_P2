@@ -2,6 +2,7 @@ import { useId, useState } from "react";
 import { Link } from "react-router-dom";
 import type { Olympic } from "../models/olympic";
 import { CountryName } from "./CountryName";
+import { MissingDataWarning } from "./MissingDataWarning";
 
 interface CountryRankingProps {
   countries: Olympic[];
@@ -149,6 +150,7 @@ export function CountryRanking({
                 {ranking.map(({ country, totalMedals }, index) => {
                   const rank = index + 1;
                   const isCurrentCountry = country.id === currentCountryId;
+                  const hasMissingData = country.participations.length === 0;
 
                   return (
                     <tr
@@ -165,21 +167,34 @@ export function CountryRanking({
                         </div>
                       </td>
                       <td className="px-4 py-3 sm:px-5 sm:py-4">
-                        <Link
-                          to={`/country/${country.id}`}
-                          className="inline-flex max-w-full items-center gap-3 rounded-md font-semibold text-gray-100 transition hover:text-blue-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400"
-                          aria-current={isCurrentCountry ? "page" : undefined}
-                        >
-                          <CountryName country={country.country} />
-                          {isCurrentCountry && (
-                            <span className="hidden rounded-full bg-blue-500/20 px-2 py-0.5 text-xs font-semibold text-blue-200 sm:inline">
-                              Pays actuel
-                            </span>
-                          )}
-                        </Link>
+                        {hasMissingData ? (
+                          <span className="inline-flex max-w-full items-center gap-3 font-semibold text-gray-300">
+                           <CountryName country={country.country} />
+                          </span>
+                        ) : (
+                          <Link
+                            to={`/country/${country.id}`}
+                            className="inline-flex max-w-full items-center gap-3 rounded-md font-semibold text-gray-100 transition hover:text-blue-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400"
+                            aria-current={isCurrentCountry ? "page" : undefined}
+                          >
+                            <CountryName country={country.country} />
+                            {isCurrentCountry && (
+                              <span className="hidden rounded-full bg-blue-500/20 px-2 py-0.5 text-xs font-semibold text-blue-200 sm:inline">
+                                Pays actuel
+                              </span>
+                            )}
+                          </Link>
+                        )}
                       </td>
                       <td className="px-4 py-3 text-right text-base font-bold tabular-nums text-white sm:px-5 sm:py-4">
-                        {totalMedals}
+                        {hasMissingData ? (
+                          <span className="inline-flex items-center justify-end gap-2">
+                            <span>?</span>
+                            <MissingDataWarning />
+                          </span>
+                        ) : (
+                          totalMedals
+                        )}
                       </td>
                     </tr>
                   );

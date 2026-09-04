@@ -72,6 +72,16 @@ function UnitedKingdomFlag() {
   )
 }
 
+function GermanyFlag() {
+  return (
+    <svg viewBox="0 0 24 16" className="h-4 w-6 shrink-0 rounded-[2px] shadow-sm" aria-hidden="true">
+      <rect width="24" height="5.34" y="0" fill="#000000" />
+      <rect width="24" height="5.33" y="5.34" fill="#DD0000" />
+      <rect width="24" height="5.33" y="10.67" fill="#FFCE00" />
+    </svg>
+  )
+}
+
 export function CountryFlag({ country }: CountryFlagProps) {
   switch (country) {
     case 'États-Unis':
@@ -84,6 +94,8 @@ export function CountryFlag({ country }: CountryFlagProps) {
       return <UnitedKingdomFlag />
     case 'France':
       return <FranceFlag />
+    case 'Allemagne':
+      return <GermanyFlag />
     default:
       return null
   }
